@@ -1,3 +1,7 @@
+$passwd_mysql_root        = "CHANGEME"
+$passwd_mysql_devkdesigns = "CHANGEME"
+
+
 group { 'puppet':
 	ensure => present,
 }
@@ -7,6 +11,7 @@ exec { 'apt-get update':
 }
 
 Package { require => Exec['apt-get update'] }
+
 
 # Services
 package { 'nginx':
@@ -27,24 +32,39 @@ service { 'php5-fpm':
 	require => Package['php5-fpm'],
 }
 
-package { 'mysql-server':
-	ensure => present,
-}
-
-service { 'mysql':
-	ensure => running,
-	require => Package['mysql-server'],
-}
-
 # Tools and Libraries
 $libraries = [ "mysql-client", "php5-gd", "php5-mysql", "php5-curl" ]
 package { $libraries: ensure => present }
 
+
+# Databases
+class { 'mysql::server':
+  config_hash => {
+    'root_password' => $passwd_mysql_root,
+  }
+}
+
+mysql::db { 'devkdesigns':
+  user      => 'devkdesigns',
+  password  => $passwd_mysql_devkdesigns,
+  host      => 'localhost',
+  grant     => ['all'],
+}
+
 # Config Files
+file {
+  ['/srv',
+   '/srv/devkdesigns.com',
+   '/srv/devkdesigns.com/www']:
+  ensure => directory,
+  owner => 'www-data',
+  group => 'www-data',
+}
+
 file { 'devkdesigns-nginx':
 	path => '/etc/nginx/sites-available/devkdesigns',
 	ensure => file,
-	require => Package['nginx'],
+	require => [ File['/srv/devkdesigns.com/www'], Package['nginx'] ],
 	source => 'puppet:///modules/nginx/devkdesigns',
 }
 
