@@ -1,7 +1,10 @@
 server {
 	listen 80;
+
 	server_name _;
-	root /vagrant;
+  #server_name devkdesigns.com www.devkdesigns.com
+
+	root /srv/devkdesigns.com/public;
 	index index.php;
 
 	location / {
