@@ -52,8 +52,8 @@ Vagrant::Config.run do |config|
   # #               Managed by Puppet.\n"
   # # }
   #
-  config.vm.provision :puppet, :module_path => "private/puppet/modules" do |puppet|
-    puppet.manifests_path = "private/puppet/manifests"
+  config.vm.provision :puppet, :module_path => "puppet/modules" do |puppet|
+    puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "base.pp"
   end
 end
