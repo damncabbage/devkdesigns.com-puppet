@@ -33,8 +33,8 @@ service { 'php5-fpm':
 }
 
 # Tools and Libraries
-$libraries = [ "mysql-client", "php5-gd", "php5-mysql", "php5-curl" ]
-package { $libraries: ensure => present }
+$extras = [ "git", "vim", "mysql-client", "php5-gd", "php5-mysql", "php5-curl" ]
+package { $extras: ensure => present }
 
 
 # Databases
