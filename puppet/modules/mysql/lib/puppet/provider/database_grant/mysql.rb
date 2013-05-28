@@ -197,8 +197,9 @@ Puppet::Type.type(:database_grant).provide(:mysql) do
 
   # Optional defaults file
   def self.defaults_file
-    if File.file?("#{Facter.value(:root_home)}/.my.cnf")
-      "--defaults-file=#{Facter.value(:root_home)}/.my.cnf"
+    root_home = Facter.value(:root_home) || '/root'
+    if File.file?("#{root_home}/.my.cnf")
+      "--defaults-file=#{root_home}/.my.cnf"
     else
       nil
     end

@@ -7,8 +7,9 @@ Puppet::Type.type(:database).provide(:mysql) do
   optional_commands :mysqladmin => 'mysqladmin'
 
   def self.defaults_file
-    if File.file?("#{Facter.value(:root_home)}/.my.cnf")
-      "--defaults-file=#{Facter.value(:root_home)}/.my.cnf"
+    root_home = Facter.value(:root_home) || '/root'
+    if File.file?("#{root_home}/.my.cnf")
+      "--defaults-file=#{root_home}/.my.cnf"
     else
       nil
     end
