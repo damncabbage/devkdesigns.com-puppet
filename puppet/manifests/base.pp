@@ -32,6 +32,16 @@ service { 'php5-fpm':
 	require => Package['php5-fpm'],
 }
 
+package { 'fail2ban':
+  ensure => present,
+}
+
+service { 'fail2ban':
+  ensure => running,
+  require => Package['fail2ban'],
+}
+
+
 # Tools and Libraries
 $extras = [ "git", "vim", "mysql-client", "php5-gd", "php5-mysql", "php5-curl" ]
 package { $extras: ensure => present }
