@@ -1,19 +1,26 @@
 server {
-	listen 80;
+  listen 80;
 
-	server_name _;
+  server_name _;
   #server_name devkdesigns.com www.devkdesigns.com
 
-	root /srv/devkdesigns.com/public;
-	index index.php;
+  root /srv/devkdesigns.com/public;
+  index index.html index.php;
 
-	location / {
-		try_files $uri /index.php;
-	}
+  location / {
+    try_files $uri $uri/ @rewrite;
+  }
 
-	location ~ \.php$ {
-		fastcgi_pass 127.0.0.1:9000;
-		fastcgi_index index.php;
-		include fastcgi_params;
-	}
+  location @rewrite {
+    rewrite ^/(.*)$ /index.php?$1;
+  }
+
+  error_page 404 /index.php;
+
+  location ~ \.php$ {
+    try_files $uri =404;
+    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_index index.php;
+    include fastcgi_params;
+  }
 }
