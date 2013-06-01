@@ -1,0 +1,19 @@
+server {
+  listen 80;
+
+  server_name demo.robhoward.id.au;
+
+  root /srv/robhoward.id.au/demo;
+  index index.html index.php;
+
+  location / {
+    try_files $uri $uri/;
+  }
+
+  location ~ \.php$ {
+    try_files $uri =404;
+    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_index index.php;
+    include fastcgi_params;
+  }
+}

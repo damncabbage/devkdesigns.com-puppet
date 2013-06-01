@@ -122,7 +122,8 @@ file { 'devkdesigns-nginx-enable':
 # robhoward.id.au
 file {
   ['/srv/robhoward.id.au',
-   '/srv/robhoward.id.au/dump']:
+   '/srv/robhoward.id.au/dump',
+   '/srv/robhoward.id.au/demo']:
   ensure => directory,
   owner => 'www-data',
   group => 'www-data',
@@ -142,6 +143,24 @@ file { 'dump-robhoward-nginx-enable':
 	notify => Service['nginx'],
 	require => [
 		File['dump-robhoward-nginx'],
+		File['default-nginx-disable'],
+	],
+}
+
+file { 'demo-robhoward-nginx':
+	path => '/etc/nginx/sites-available/demo.robhoward.id.au',
+	ensure => file,
+	require => [ File['/srv/robhoward.id.au/demo'], Package['nginx'] ],
+	source => 'puppet:///modules/nginx/demo.robhoward.id.au',
+}
+
+file { 'demo-robhoward-nginx-enable':
+	path => '/etc/nginx/sites-enabled/demo.robhoward.id.au',
+	target => '/etc/nginx/sites-available/demo.robhoward.id.au',
+	ensure => link,
+	notify => Service['nginx'],
+	require => [
+		File['demo-robhoward-nginx'],
 		File['default-nginx-disable'],
 	],
 }
