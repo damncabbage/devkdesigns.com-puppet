@@ -1,0 +1,12 @@
+server {
+  listen 80;
+
+  server_name dump.robhoward.id.au;
+
+  root /srv/robhoward.id.au/dump;
+  index index.html;
+
+  location / {
+    autoindex on;
+  }
+}

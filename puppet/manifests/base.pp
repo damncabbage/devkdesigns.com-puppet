@@ -59,10 +59,25 @@ mysql::db { 'devkdesigns':
   grant     => ['all'],
 }
 
-# Config Files
+
+### Sites ###
+
+file { '/srv':
+  ensure => directory,
+  owner => 'root',
+  group => 'root',
+}
+
+# Disable default
+file { 'default-nginx-disable':
+	path => '/etc/nginx/sites-enabled/default',
+	ensure => absent,
+	require => Package['nginx'],
+}
+
+# devkdesigns
 file {
-  ['/srv',
-   '/srv/devkdesigns.com',
+  ['/srv/devkdesigns.com',
    '/srv/devkdesigns.com/www']:
   ensure => directory,
   owner => 'www-data',
@@ -76,12 +91,6 @@ file { 'devkdesigns-nginx':
 	source => 'puppet:///modules/nginx/devkdesigns',
 }
 
-file { 'default-nginx-disable':
-	path => '/etc/nginx/sites-enabled/default',
-	ensure => absent,
-	require => Package['nginx'],
-}
-
 file { 'devkdesigns-nginx-enable':
 	path => '/etc/nginx/sites-enabled/devkdesigns',
 	target => '/etc/nginx/sites-available/devkdesigns',
@@ -89,6 +98,33 @@ file { 'devkdesigns-nginx-enable':
 	notify => Service['nginx'],
 	require => [
 		File['devkdesigns-nginx'],
+		File['default-nginx-disable'],
+	],
+}
+
+# robhoward.id.au
+file {
+  ['/srv/robhoward.id.au',
+   '/srv/robhoward.id.au/dump']:
+  ensure => directory,
+  owner => 'www-data',
+  group => 'www-data',
+}
+
+file { 'dump-robhoward-nginx':
+	path => '/etc/nginx/sites-available/dump.robhoward.id.au',
+	ensure => file,
+	require => [ File['/srv/robhoward.id.au/dump'], Package['nginx'] ],
+	source => 'puppet:///modules/nginx/dump.robhoward.id.au',
+}
+
+file { 'dump-robhoward-nginx-enable':
+	path => '/etc/nginx/sites-enabled/dump.robhoward.id.au',
+	target => '/etc/nginx/sites-available/dump.robhoward.id.au',
+	ensure => link,
+	notify => Service['nginx'],
+	require => [
+		File['dump-robhoward-nginx'],
 		File['default-nginx-disable'],
 	],
 }

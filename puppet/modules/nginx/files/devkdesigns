@@ -1,8 +1,7 @@
 server {
   listen 80;
 
-  server_name _;
-  #server_name devkdesigns.com www.devkdesigns.com
+  server_name devkdesigns.com www.devkdesigns.com;
 
   root /srv/devkdesigns.com/public;
   index index.html index.php;
