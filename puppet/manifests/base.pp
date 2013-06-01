@@ -1,6 +1,4 @@
-$passwd_mysql_root        = "CHANGEME"
-$passwd_mysql_devkdesigns = "CHANGEME"
-
+import './_credentials.pp'
 
 group { 'puppet':
 	ensure => present,
