@@ -75,6 +75,23 @@ file { 'default-nginx-disable':
 	require => Package['nginx'],
 }
 
+# Enable wildcard
+file { 'wildcard-nginx':
+	path => '/etc/nginx/sites-available/wildcard',
+	ensure => file,
+	require => [ Package['nginx'] ],
+	source => 'puppet:///modules/nginx/wildcard',
+}
+
+file { 'wildcard-nginx-enable':
+	path => '/etc/nginx/sites-enabled/wildcard',
+	target => '/etc/nginx/sites-available/wildcard',
+	ensure => link,
+	notify => Service['nginx'],
+	require => [ File['default-nginx-disable'] ],
+}
+
+
 # devkdesigns
 file {
   ['/srv/devkdesigns.com',
