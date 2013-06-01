@@ -99,6 +99,7 @@ file {
   ensure => directory,
   owner => 'www-data',
   group => 'www-data',
+  mode => 775,
 }
 
 file { 'devkdesigns-nginx':
@@ -127,6 +128,7 @@ file {
   ensure => directory,
   owner => 'www-data',
   group => 'www-data',
+  mode => 775,
 }
 
 file { 'dump-robhoward-nginx':
