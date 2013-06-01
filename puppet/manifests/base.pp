@@ -41,7 +41,7 @@ service { 'fail2ban':
 
 
 # Tools and Libraries
-$extras = [ "git", "vim", "mysql-client", "php5-gd", "php5-mysql", "php5-curl" ]
+$extras = [ "ack-grep", "git", "vim", "mysql-client", "php5-gd", "php5-mysql", "php5-curl" ]
 package { $extras: ensure => present }
 
 
