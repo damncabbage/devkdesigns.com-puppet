@@ -1,4 +1,18 @@
-define vps::website($site_config) {
+define vps::website(
+  $site_config,
+  $paths = [],
+  $db = {},
+) {
+
+  if ($paths) {
+    file { $paths:
+      ensure => directory,
+      owner => 'www-data',
+      group => 'www-data',
+      mode => 775,
+      before => Service['nginx'],
+    }
+  }
 
   file { "/etc/nginx/sites-available/${title}":
     ensure => file,
@@ -6,7 +20,6 @@ define vps::website($site_config) {
     notify => Service['nginx'],
     source => $site_config,
   }
-
   file { "/etc/nginx/sites-enabled/${title}":
     target => "/etc/nginx/sites-available/${title}",
     ensure => link,
