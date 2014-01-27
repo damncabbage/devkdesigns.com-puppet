@@ -2,6 +2,10 @@
 
 A set of manifests for a standalone Puppet install.
 
-1. `scp -r puppet devkdesigns.com:`
-2. `sudo apt-get install puppet && puppet apply --modulepath=puppet/modules puppet/manifests/base.pp`
-3. Return in six months after learning more about Puppet; hang head in shame.
+1. Set up `files`, `hiera`, `manifests` and `modules` under `/etc/puppet` on the server.
+2. Run the Puppet upgrade script in `shell/ensure-puppet3.sh`.
+3. Create a `/etc/puppet/hiera/data/secrets.yaml` from the provided example.
+4. `sudo puppet apply --hiera_config /etc/puppet/hiera/hiera.yaml --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp`
+5. Return in six months after learning more about Puppet; hang head in shame.
+
+(Additional steps: use hiera-eyaml instead of a secrets file, set up a Puppet Master.)
