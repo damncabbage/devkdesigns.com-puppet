@@ -1,0 +1,10 @@
+:backends:
+  - yaml
+:logger: console
+:hierarchy:
+  - secrets # TODO: hiera-eyaml
+  - common
+:yaml:
+  :datadir: /etc/puppet/hiera/data
+:puppet:
+  :datasource: data

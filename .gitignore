@@ -1,4 +1,3 @@
-.DS_Store
-.vagrant
-puppet/manifests/_credentials.pp
+/.vagrant
 /.tmp
+/puppet/hiera/data/secrets.yaml
