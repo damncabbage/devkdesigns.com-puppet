@@ -1,10 +1,15 @@
-Vagrant::Config.run do |config|
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure('2') do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
+  # Set fqdn
+  config.vm.hostname = 'vps.robhoward.local'
+
   # Every Vagrant virtual environment requires a box to build off of.
-  #config.vm.box = "oneiric32"
   config.vm.box = "precise32"
 
   # The url from where the 'config.vm.box' box will be fetched if it
@@ -23,37 +28,32 @@ Vagrant::Config.run do |config|
   # Assign this VM to a bridged network, allowing you to connect directly to a
   # network using the host's network device. This makes the VM appear as another
   # physical device on your network.
-  # config.vm.network :bridged
+  config.vm.network :bridged
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port 80, 8080
+  #config.vm.forward_port 80, 8080
 
-  # Share an additional folder to the guest VM. The first argument is
-  # an identifier, the second is the path on the guest to mount the
-  # folder, and the third is the path on the host to the actual folder.
-  config.vm.share_folder "www-devkdesigns", "/srv/devkdesigns.com", "./devkdesigns"
+  # Website development
+  config.vm.synced_folder "./devkdesigns", "/srv/devkdesigns.com"
 
-  # Enable provisioning with Puppet stand alone.  Puppet manifests
-  # are contained in a directory path relative to this Vagrantfile.
-  # You will need to create the manifests directory and a manifest in
-  # the file base.pp in the manifests_path directory.
-  #
-  # An example Puppet manifest to provision the message of the day:
-  #
-  # # group { "puppet":
-  # #   ensure => "present",
-  # # }
-  # #
-  # # File { owner => 0, group => 0, mode => 0644 }
-  # #
-  # # file { '/etc/motd':
-  # #   content => "Welcome to your Vagrant-built virtual machine!
-  # #               Managed by Puppet.\n"
-  # # }
-  #
-  config.vm.provision :puppet, :module_path => "puppet/modules" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "base.pp"
+  # Share in Puppet dirs manually.
+  config.vm.synced_folder "./puppet/files", "/etc/puppet/files"
+  config.vm.synced_folder "./puppet/hiera", "/etc/puppet/hiera"
+
+  # Update Puppet to 3.x
+  config.vm.provision :shell do |shell|
+    shell.path = 'shell/ensure-puppet3.sh'
+  end
+
+  # Kick off Puppet provisioning itself
+  config.vm.provision :puppet do |puppet|
+    puppet.module_path    = 'puppet/modules'
+    puppet.manifests_path = 'puppet/manifests'
+    puppet.manifest_file  = "site.pp"
+    puppet.options = [
+      '--hiera_config /etc/puppet/hiera/hiera.yaml',
+      '--fileserverconfig=/vagrant/puppet/fileserver.conf',
+    ]
   end
 end
