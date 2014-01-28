@@ -9,8 +9,4 @@ class vps::mysql {
     fail('Missing non-blank Hiera data for vps::mysql::root_password')
   }
 
-  package { ['mysql-client']:
-    ensure => present,
-  }
-
 }
