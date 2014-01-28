@@ -1,7 +1,6 @@
 define vps::website(
   $site_config,
   $paths = [],
-  $db = {},
 ) {
 
   if ($paths) {
